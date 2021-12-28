@@ -15,9 +15,6 @@ interface Task {
 export function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState('');
-  useEffect(() => {
-    console.log(tasks); 
-  }, [tasks])
 
   function handleCreateNewTask() {
     // Crie uma nova task com um id random, não permita criar caso o título seja vazio.
@@ -45,17 +42,19 @@ export function TaskList() {
 
   function handleToggleTaskCompletion(id: string) {
     // Altere entre `true` ou `false` o campo `isComplete` de uma task com dado ID
+   
     tasks.map(task => {
-      if(task.id == id && task.isComplete == false){
-        const newList = tasks.filter((task) => task.isComplete = true);
-        setTasks(newList);
-
-      } else {
-        const newList = tasks.filter((task) => task.isComplete = false);
-        setTasks(newList);
-
+      if(task.id == id && !task.isComplete){
+        task.isComplete = true;
+      }else if(task.id == id && task.isComplete){
+        task.isComplete = false;
       }
+      setTasks(() => [... tasks]);
+      
     })
+    
+      
+
 
   }
 
@@ -78,6 +77,7 @@ export function TaskList() {
         <div className="input-group">
           <input 
             type="text" 
+            id="campo"
             placeholder="Adicionar novo todo" 
             onChange={(e) => setNewTaskTitle(e.target.value)}
             value={newTaskTitle}
